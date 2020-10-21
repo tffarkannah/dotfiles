@@ -35,8 +35,8 @@ bindsym $mod+Return exec i3-sensible-terminal
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+# start DMENU (a program launcher)------------------------
+# bindsym $mod+d exec dmenu_run
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -128,6 +128,10 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+c focus child
 
+# resize current window
+bindsym $mod+r mode "resize"
+
+
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -203,32 +207,48 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-bindsym $mod+r mode "resize"
 
 
-
-# Lock screen
-bindsym $mod+Shift+x exec --no-startup-id blurlock
-
+# Lock screen-----------------------------------------------------------
+#bindsym $mod+Shift+x exec --no-startup-id blurlock
+bindsym $mod+Shift+x exec --no-startup-id "i3lock -i Pictures/Wallpapers/bsod0.png" 
 
 
 #standard program start shortcuts
 bindsym $mod+Shift+f exec firefox
 
+#Sound ALSA 
+#
+# bindsym $mod+semicolon  exec "amixer -q sset Master,0 1+ unmute"
+# bindsym $mod+apostrophe exec "amixer -q sset Master,0 1- unmute"
+# bindsym $mod+numbersign exec "amixer -q sset Master,0 toggle"
+
+
 
 # Sound with pulseaudio -----------------------------------------------------------------
 #
-exec --no-startup-id volumeicon
-exec --no-startup-id pulseaudio
-exec --no-startup-id pa-applet
+# exec --no-startup-id volumeicon
+# exec --no-startup-id pulseaudio
+# exec --no-startup-id pa-applet
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Pulse Audio controls - with my shorcuts
+bindsym $mod+semicolon   exec --no-startup-id pactl set-sink-volume 0 +5%  #increase sound volume
+bindsym $mod+apostrophe  exec --no-startup-id pactl set-sink-volume 0 -5%  #decrease sound volume
+bindsym $mod+numbersign  exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+ 
 
 
-# Wallpaper if not set with pywal
+
+
+# Wallpaper if not set with pywal-----------------------------------------
+#
+
 #exec_always --no-startup-id feh --bg-fill ~/Pictures/Wallpapers/"norwayansuz.jpg"
 
 
@@ -236,10 +256,19 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute s
 #toggle bar on/off
 bindsym $mod+y bar mode toggle 
 
-#screen brightness
-bindsym $mod+b exec xbacklight -inc 20  # increase screen brightness by 20
-bindsym $mod+n exec xbacklight -dec 20  # decrease screen brightness by 20
-bindsym $mod+m exec xbacklight -set 100 # screen brightness to max
+#screen brightness----------------------------------------------
+#
+#
+#
+#NEEDS FIXING
+bindsym $mod+n     exec xbacklight -inc 20  # increase screen brightness by 20
+bindsym $mod+m     exec xbacklight -dec 20  # decrease screen brightness by 20
+bindsym $mod+comma exec xbacklight -set 100 # screen brightness to max
+
+
+
+#i3bar------------------------------------------------------------
+#
 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
@@ -291,18 +320,19 @@ bar {
 # from the generated scheme.
 # NOTE: The '#f0f0f0' in the lines below is the color i3 will use if
 # it fails to get colors from Xresources.
+
 set_from_resource $fg           i3wm.color7 #f0f0f0
 set_from_resource $bg           i3wm.color2 #f0f0f0
 set_from_resource $focused      i3wm.color6 #f0f0f0
 set_from_resource $indicator    i3wm.color1  #ffffff
 set_from_resource $unfocused	i3wm.color0
 
-# class                 border  backgr.    text    indicator child_border
-client.focused          $bg     #000000    $fg     $fg       $focused
-client.focused_inactive $bg     $bg        $fg     $bg       $unfocused
-client.unfocused        $bg     $bg        $fg     $bg       $unfocused
-client.urgent           $bg     $bg        $fg     $bg       $bg
-client.placeholder      $bg     $bg        $fg     $bg       $bg
+# class                 border  backgr.        text    indicator child_border
+client.focused          $bg     #000000        $fg     $fg       $focused
+client.focused_inactive $bg     $bg            $fg     $bg       $unfocused
+client.unfocused        $bg     $bg            $fg     $bg       $unfocused
+client.urgent           $bg     $bg            $fg     $bg       $bg
+client.placeholder      $bg     $bg            $fg     $bg       $bg
 
 client.background       $bg
 
@@ -319,7 +349,7 @@ client.background       $bg
 for_window [class="^.*"] border pixel 2 
 
 # disable borders/gaps for one container
-# smart_borders on
+smart_borders on
 smart_gaps on
 
 # standard gaps
@@ -331,7 +361,7 @@ bindsym $mod+Shift+d gaps inner all plus  3
 
 
 
-# Autostart applications
+# Autostart applications-----------------------------------------------
 
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1; compton -b
@@ -343,10 +373,11 @@ exec --no-startup-id clipit
 exec --no-startup-id xautolock -time 30 -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
-#exec_always --no-startup-id compton
+exec_always --no-startup-id picom
+exec_always --no-startup-id colours.sh
 
 
-# Open specific applications in floating mode
+# Open specific applications in floating mode--------------------------
 for_window [title="alsamixer"] floating enable border pixel 1
 for_window [class="calamares"] floating enable border normal
 for_window [class="Clipgrab"] floating enable
@@ -372,4 +403,10 @@ for_window [class="Simple-scan"] floating enable border normal
 for_window [class="(?i)System-config-printer.py"] floating enable border normal
 for_window [class="Skype"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
- 
+
+
+# rofi--------------------------------------------
+
+bindsym $mod+d exec rofi -show drun
+bindsym $mod+v exec rofi -show window 
+bindsym $mod+b exec rofi -show run
